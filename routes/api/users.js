@@ -8,7 +8,8 @@ const {
 const {
   CommunityMiddleware,
   AuthMiddleware,
-  uploadMiddleware
+  uploadMiddleware,
+  ActivityMiddleware
 } = require("../../helpers/index.js");
 
 // Register
@@ -60,6 +61,7 @@ Router.get(
   "/:id/follow",
   AuthMiddleware,
   CommunityMiddleware,
+  ActivityMiddleware,
   FollowingsController.follow
 );
 
@@ -67,6 +69,7 @@ Router.get(
   "/:id/unfollow",
   AuthMiddleware,
   CommunityMiddleware,
+  ActivityMiddleware,
   FollowingsController.unfollow
 );
 Router.patch(

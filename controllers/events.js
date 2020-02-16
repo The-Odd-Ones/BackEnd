@@ -22,7 +22,6 @@ module.exports.makeEvent = async (req,res)=>{
 module.exports.showEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id).lean();
-    console.log(event)
     await eventFeatures([event] , req.user)
     res.json({
       success: true,

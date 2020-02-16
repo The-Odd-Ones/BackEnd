@@ -23,7 +23,7 @@ dotenv.config({
 });
 
 // DB Connection
-connectDB();
+let con = connectDB();
 // CORS middleware,on
 app.use(cors());
 // User.updateMany({isVerified : true})
@@ -45,6 +45,11 @@ app.use("/api/dashboard", dashboard);
 const PORT = process.env.PORT || 8080;
 
 app.get("/", (req, res) => res.json({ project: "Communities", team: "Us" }));
+
+
+
+
+
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
 });
