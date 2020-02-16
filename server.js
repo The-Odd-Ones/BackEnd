@@ -1,5 +1,4 @@
 const express = require("express");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
 const passport = require("passport");
@@ -16,11 +15,6 @@ const {
   notifications,
   dashboard
 } = require("./routes/api/index.js");
-
-//Load env vars
-dotenv.config({
-  path: "./config/config.env"
-});
 
 // DB Connection
 let con = connectDB();
