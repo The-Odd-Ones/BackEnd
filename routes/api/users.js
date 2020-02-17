@@ -78,4 +78,10 @@ Router.patch(
   uploadMiddleware.single("file"),
   UsersController.updateUser
 );
+
+Router.delete(
+  "/cancelverification",
+  AuthMiddleware,
+  UsersController.deleteUser
+);
 module.exports = Router;
