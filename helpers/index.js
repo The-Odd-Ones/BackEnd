@@ -6,5 +6,6 @@ module.exports = {
   UserFeatures: require("./userFeatures.js"),
   AdminMiddlware: require('./adminMiddleware'),
   NotificationHandler : require('./notificationHandler.js'),
-  SendMailVerification: require("./sendMailVerification")
+  SendMailVerification: require("./sendMailVerification"),
+  ActivityMiddleware : require('./activityMiddleware.js')
 };

@@ -13,6 +13,15 @@ Router.route('/posts').get(AuthMiddleware, AdminMiddlware, DashboardController.g
 Router.route('/likes').get(AuthMiddleware, AdminMiddlware, DashboardController.getLikes)
 Router.route('/events').get(AuthMiddleware, AdminMiddlware, DashboardController.getEvents)
 Router.route('/users').get(AuthMiddleware,AdminMiddlware,DashboardController.usersCount)
+Router.route('/communities/:id/activity').get(AuthMiddleware,AdminMiddlware,DashboardController.activity)
+Router.route('/models').get(AuthMiddleware,AdminMiddlware,DashboardController.getModels)
+Router.route('/models/:model/documents').get(AuthMiddleware,AdminMiddlware,DashboardController.getDocuments)
+Router.route('/models/:model/indexes').get(AuthMiddleware,AdminMiddlware,DashboardController.getIndexes)
+Router.route('/models/:model/notindexes').get(AuthMiddleware,AdminMiddlware,DashboardController.getNotIndexes)
+Router.route('/models/:model/indexes').post(AuthMiddleware,AdminMiddlware,DashboardController.createIndex)
+Router.route('/models/:model/indexes/:index').delete(AuthMiddleware,AdminMiddlware,DashboardController.dropIndex)
+
+
 
 Router.route("/createCommunity").post(
   AuthMiddleware,

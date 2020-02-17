@@ -1,5 +1,4 @@
 const express = require("express");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
 const passport = require("passport");
@@ -17,13 +16,8 @@ const {
   dashboard
 } = require("./routes/api/index.js");
 
-//Load env vars
-dotenv.config({
-  path: "./config/config.env"
-});
-
 // DB Connection
-connectDB();
+let con = connectDB();
 // CORS middleware,on
 app.use(cors());
 // User.updateMany({isVerified : true})
@@ -45,6 +39,11 @@ app.use("/api/dashboard", dashboard);
 const PORT = process.env.PORT || 8080;
 
 app.get("/", (req, res) => res.json({ project: "Communities", team: "Us" }));
+
+
+
+
+
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}!`);
 });

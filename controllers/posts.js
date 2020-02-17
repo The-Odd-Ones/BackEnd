@@ -123,7 +123,6 @@ module.exports.sharePost = async (req, res) => {
 
 // using for new users that didn't choose their interrest
 module.exports.getPosts = async (req, res, next) => {
-  console.log(req.body);
   try {
     const userId = req.user._id;
     const communityId = req.community._id;
@@ -186,7 +185,7 @@ module.exports.getPostsByUserId = async (req, res, next) => {
       deactivated: false
     }).sort({ _id: -1 })
     .lean()
-    .limit(5)
+    .limit(20)
     .skip(Number(req.query.page || 0))
     .populate(['user', {path : 'sharedpost' , populate:{path : 'user'}}])
     await postFeatures(posts, req.user)
@@ -222,6 +221,8 @@ module.exports.getPostsByEvent = async (req, res, next) => {
     const posts = await Post.find({ event: req.params.id })
       .sort({ _id: -1 })
       .lean()
+      .limit(20)
+      .skip(Number(req.query.page || 0))
       .populate(["user", { path: "sharedpost", populate: { path: "user" } }]);
 
     await postFeatures(posts, req.user);

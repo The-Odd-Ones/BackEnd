@@ -10,6 +10,7 @@ const {
 const {
   CommunityMiddleware,
   AuthMiddleware,
+  ActivityMiddleware,
   uploadMiddleware
 } = require("../../helpers/index.js");
 
@@ -23,11 +24,13 @@ Router.post(
   EventsController.makeEvent
 );
 
-Router.route('/:id/invite').post(AuthMiddleware, CommunityMiddleware, NotificationsController.invite)
+Router.route('/:id/invite').post(AuthMiddleware, CommunityMiddleware,ActivityMiddleware, NotificationsController.invite)
 
 Router.post(
   "/:id/posts",
   AuthMiddleware,
+  CommunityMiddleware,
+  ActivityMiddleware,
   uploadMiddleware.single("file"),
   PostsController.createEventPost
 );
@@ -48,11 +51,13 @@ Router.get(
 );
 
 Router.get("/:id", AuthMiddleware, EventsController.showEvent);
-Router.get("/:id/like", AuthMiddleware, LikesController.likeEvent);
-Router.get("/:id/dislike", AuthMiddleware, LikesController.dislikeEvent);
+Router.get("/:id/like", AuthMiddleware, CommunityMiddleware,ActivityMiddleware, LikesController.likeEvent);
+Router.get("/:id/dislike", AuthMiddleware, CommunityMiddleware,ActivityMiddleware, LikesController.dislikeEvent);
 Router.get(
   "/:id/enrollment",
   AuthMiddleware,
+  CommunityMiddleware,
+  ActivityMiddleware,
   EventsController.toggleEnrollment
 );
 
