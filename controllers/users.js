@@ -31,7 +31,7 @@ module.exports.recommendations = async (req, res) => {
         ]
       })
       .group({ _id: "$user", posts: { $push: "$post" } })
-      .sort({ posts: 1 });
+      .sort({ posts: 1 }).limit(3);
     let users = await User.populate(recommendations, {
       path: "_id",
       options: { lean: true }

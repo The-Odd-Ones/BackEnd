@@ -221,6 +221,8 @@ module.exports.getPostsByEvent = async (req, res, next) => {
     const posts = await Post.find({ event: req.params.id })
       .sort({ _id: -1 })
       .lean()
+      .limit(20)
+      .skip(Number(req.query.page || 0))
       .populate(["user", { path: "sharedpost", populate: { path: "user" } }]);
 
     await postFeatures(posts, req.user);
