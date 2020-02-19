@@ -63,12 +63,15 @@ module.exports.unfollow = async (req, res) => {
 module.exports.getFollowings = async (req, res) => {
   try {
     const follower = req.params.id;
-    const result = await Following.find({
+    let result = await Following.find({
       follower,
       community: req.community._id
     })
       .populate("followed")
       .lean();
+
+      // result = result.filter(one => one.followed != null)
+
     await UserFeatures(
       result.map(following => following.followed),
       req.community,
@@ -83,12 +86,14 @@ module.exports.getFollowers = async (req, res) => {
   try {
     const followed = req.params.id;
 
-    const result = await Following.find({
+    let result = await Following.find({
       followed,
       community: req.community._id
     })
       .populate("follower")
       .lean();
+    // result = result.filter(one => one.follower != null)
+    console.log(result)
     await UserFeatures(
       result.map(followings => followings.follower),
       req.community,
@@ -96,7 +101,6 @@ module.exports.getFollowers = async (req, res) => {
     );
 
     res.json({ success: true, result});
-    console.log(result);
   } catch (err) {
     res.json({ success: false, err : err.message });
   }

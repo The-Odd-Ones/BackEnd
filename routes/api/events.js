@@ -62,6 +62,7 @@ Router.get(
 );
 
 Router.get("/:id", AuthMiddleware, EventsController.showEvent);
+Router.delete("/:id", AuthMiddleware, EventsController.removeEvent)
 
 Router.get("/:id/posts", AuthMiddleware, PostsController.getPostByEvent);
 

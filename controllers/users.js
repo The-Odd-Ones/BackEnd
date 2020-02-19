@@ -68,7 +68,7 @@ module.exports.signUp = async (req, res, next) => {
 
     let user = await newUser.save();
 
-    SendMailVerification(user.email, user.firstname, key);
+    SendMailVerification(user.email, user, key);
     next();
   } catch (err) {
     res.json({ success: false, msg: `something went wrong : ${err}` });

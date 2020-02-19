@@ -12,7 +12,7 @@ module.exports = async (email, user, n) => {
     to: email, // list of receivers
     subject: "Verification Code", // Subject line
     html: `<h3> Hey ${user.firstname} </h3>
-      <p> please enter this number to verify + '' + ${n} </p>` // plain text body
+      <p> please enter this number to verify  ${n} </p>` // plain text body
   };
   transporter.sendMail(mailOptions, function(err, info) {
     if (err) console.log(err);
