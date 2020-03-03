@@ -14,7 +14,7 @@ module.exports.createComment = async (req, res) => {
       user: req.user._id,
       post: req.params.id
     });
-    let result = await comment.save();
+    let result = (await comment.save()).toObject();
     result.user = await User.findById(result.user)
         let notifier = {
           sender : req.user._id,
@@ -24,11 +24,13 @@ module.exports.createComment = async (req, res) => {
           comment:result,
           community: req.community._id
          }
-    await NotificationHandler.push(notifier),
+         await Promise.all([
+          commentFeatures([result], req.user),
+           NotificationHandler.push(notifier),
+         ])
 
     res.json({ success: true, result });
   } catch (err) {
-    console.log(err)
     res.json({ success: false, err });
   }
 };

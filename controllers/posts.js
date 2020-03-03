@@ -1,4 +1,4 @@
-const { Post, Following, Like, Comment,User } = require("../models/index.js");
+const { Post, Following, Like, Comment,User,Event } = require("../models/index.js");
 const {commentFeatures} = require('./comments.js')
 const { cloudinary } = require("../helpers/index.js");
 const {NotificationHandler} = require('../helpers/index.js')
@@ -145,7 +145,7 @@ module.exports.getPosts = async (req, res, next) => {
           .lean()
           .populate([
             "user",
-            { path: "sharedpost", populate: { path: "user" } }
+            { path: "sharedpost", match : {deactivated: false}, populate: { path: "user" } }
           ])
       : [];
     await postFeatures(posts, req.user);
@@ -161,8 +161,10 @@ module.exports.getPosts = async (req, res, next) => {
 module.exports.getPost = async (req, res, next) => {
   try {
     let post = await Post.findOne({_id : req.params.id, deactivated:false})
-          .lean()
-          .populate(['user', {path : 'sharedpost' , populate:{path : 'user'}}])
+    .lean()
+    .populate(['user', {path : 'sharedpost',match : {deactivated: false} , populate:{path : 'user'}}])
+    if(''.concat(post.community) != ''.concat(req.community._id) && !post.event) return res.json({success : false,result:false,msg:"can't find post"})
+    else if(post.event && ''.concat((await Event.populate(post, {path : 'event'})).event.community) != ''.concat(req.community._id)) return res.json({success : false,result:false,msg:"can't find post"})
     post.comments = await Comment.find({ post: post._id,deactivated: false }).sort({_id : -1}).populate('user')
     .limit(5).lean()
     await Promise.all([postFeatures([post], req.user), commentFeatures(post.comments,req.user)])

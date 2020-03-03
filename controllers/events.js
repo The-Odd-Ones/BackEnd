@@ -10,6 +10,7 @@ module.exports.makeEvent = async (req,res)=>{
           req.body.file = file.url
         }
         req.body.community = req.community._id
+        req.body.user = req.user._id
         req.body.location =  JSON.parse(req.body.location)
         let event = (await Event.create(req.body)).toObject()
         await eventFeatures([event], req.user)
@@ -21,7 +22,8 @@ module.exports.makeEvent = async (req,res)=>{
 
 module.exports.showEvent = async (req, res, next) => {
   try {
-    const event = await Event.findById(req.params.id).lean();
+    const event = await Event.findOne({_id: req.params.id, deactivated : false}).lean().populate('user')
+    if(!event) return res.json({success : false})
     await eventFeatures([event] , req.user)
     res.json({
       success: true,
@@ -54,6 +56,19 @@ module.exports.showEvents = async (req, res, next) => {
 };
 
 
+module.exports.removeEvent = async (req,res)=>{
+  try{
+   
+    var event = await Event.findById(req.params.id)
+    if(req.user._id.toString() !=  event.user.toString()) return res.json({success : false})
+    event.deactivated = true
+  
+       await event.save()
+  res.json({success : true})
+}catch (err) {
+  res.json({ success: false, err:err.message });
+}
+}
 
 module.exports.nearby = async (req, res) => {
   try {
@@ -71,7 +86,7 @@ module.exports.nearby = async (req, res) => {
           spherical: true
         }
       },
-      { $match: { community: req.community._id, end: {$gte: new Date() } } },
+      { $match: { community: req.community._id, end: {$gte: new Date() }, deactivated : false } },
       { $sort: { "distance": 1 } },
 
     ]))
